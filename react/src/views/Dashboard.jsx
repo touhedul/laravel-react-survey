@@ -1,8 +1,12 @@
 import React from 'react'
+import PageComponent from '../components/PageComponent'
 
 function Dashboard() {
    return (
-      <div>Dashboard</div>
+      <PageComponent title="Dashboard">
+
+         Dashboard content
+      </PageComponent>
    )
 }
 

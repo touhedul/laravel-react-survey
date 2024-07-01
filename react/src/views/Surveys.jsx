@@ -1,8 +1,9 @@
 import React from 'react'
+import PageComponent from '../components/PageComponent'
 
 function Surveys() {
    return (
-      <div>Surveys</div>
+      <PageComponent title={'Surveys'}>Survey Content</PageComponent>
    )
 }
 
