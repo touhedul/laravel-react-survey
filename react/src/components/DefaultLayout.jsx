@@ -1,6 +1,6 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { NavLink, Outlet } from 'react-router-dom'
+import { Navigate, NavLink, Outlet } from 'react-router-dom'
 import { useStateContext } from '../contexts/ContextProvider'
 
 const navigation = [
@@ -22,7 +22,10 @@ function logout() {
 
 export default function DefaultLayout() {
 
-   const { currentUser } = useStateContext();
+   const { currentUser, userToken } = useStateContext();
+   if (!userToken) {
+      return <Navigate to="login" />
+   }
    return (
       <>
          <div className="min-h-full">
@@ -41,6 +44,7 @@ export default function DefaultLayout() {
                               </div>
                               <div className="hidden md:block">
                                  <div className="ml-10 flex items-baseline space-x-4">
+                                    {userToken}
                                     {navigation.map((item) => (
                                        <NavLink
                                           key={item.name}
