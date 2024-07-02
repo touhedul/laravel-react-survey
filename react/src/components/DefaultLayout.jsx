@@ -1,13 +1,8 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { NavLink, Outlet } from 'react-router-dom'
+import { useStateContext } from '../contexts/ContextProvider'
 
-const user = {
-   name: 'Tom Cook',
-   email: 'tom@example.com',
-   imageUrl:
-      'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-}
 const navigation = [
    { name: 'Dashboard', to: '/' },
    { name: 'Surveys', to: '/surveys' },
@@ -27,7 +22,7 @@ function logout() {
 
 export default function DefaultLayout() {
 
-
+   const { currentUser } = useStateContext();
    return (
       <>
          <div className="min-h-full">
@@ -72,7 +67,7 @@ export default function DefaultLayout() {
                                        <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                                           <span className="absolute -inset-1.5" />
                                           <span className="sr-only">Open user menu</span>
-                                          <img className="h-8 w-8 rounded-full" src={user.imageUrl} alt="" />
+                                          <UserIcon className='h-10 w-10 rounded-full text-white bg-black p-2' />
                                        </MenuButton>
                                     </div>
                                     <MenuItems
@@ -131,11 +126,11 @@ export default function DefaultLayout() {
                         <div className="border-t border-gray-700 pb-3 pt-4">
                            <div className="flex items-center px-5">
                               <div className="flex-shrink-0">
-                                 <img className="h-10 w-10 rounded-full" src={user.imageUrl} alt="" />
+                                 <UserIcon className='h-10 w-10 rounded-full text-white bg-black p-2' />
                               </div>
                               <div className="ml-3">
-                                 <div className="text-base font-medium leading-none text-white">{user.name}</div>
-                                 <div className="text-sm font-medium leading-none text-gray-400">{user.email}</div>
+                                 <div className="text-base font-medium leading-none text-white">{currentUser.name}</div>
+                                 <div className="text-sm font-medium leading-none text-gray-400">{currentUser.email}</div>
                               </div>
                            </div>
                            <div className="mt-3 space-y-1 px-2">
