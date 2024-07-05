@@ -2,6 +2,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Navigate, NavLink, Outlet } from 'react-router-dom'
 import { useStateContext } from '../contexts/ContextProvider'
+import axiosClient from '../axios'
 
 const navigation = [
    { name: 'Dashboard', to: '/' },
@@ -15,14 +16,27 @@ function classNames(...classes) {
    return classes.filter(Boolean).join(' ')
 }
 
-function logout() {
-   console.log('Logout');
-}
 
 
 export default function DefaultLayout() {
 
-   const { currentUser, userToken } = useStateContext();
+   const { currentUser, userToken, setCurrentUser, setUserToken } = useStateContext();
+
+   const logout = () => {
+      axiosClient.post('/logout')
+         .then(response => {
+            if (response.status == 200) {
+               setCurrentUser({});
+               setUserToken(null);
+               localStorage.removeItem('token');
+            }
+
+         })
+         .catch(error => {
+            console.log(error)
+         })
+   }
+
    if (!userToken) {
       return <Navigate to="login" />
    }
