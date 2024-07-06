@@ -58,7 +58,6 @@ export default function DefaultLayout() {
                               </div>
                               <div className="hidden md:block">
                                  <div className="ml-10 flex items-baseline space-x-4">
-                                    {userToken}
                                     {navigation.map((item) => (
                                        <NavLink
                                           key={item.name}

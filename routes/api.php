@@ -17,9 +17,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::resources([
+        'surveys' => \App\Http\Controllers\SurveyController::class
+    ]);
 });
 Route::post('/signup', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
-Route::resources([
-    'survey' => \App\Http\Controllers\SurveyController::class
-]);
