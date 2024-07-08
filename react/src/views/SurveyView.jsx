@@ -4,6 +4,7 @@ import TButton from '../components/core/TButton';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import axiosClient from '../axios';
 import { useNavigate } from 'react-router-dom';
+import SurveyQuestions from '../components/SurveyQuestions';
 
 function SurveyView() {
    const navigate = useNavigate();
@@ -26,6 +27,7 @@ function SurveyView() {
          e.target.value = "";
       }
       reader.readAsDataURL(file);
+      setErrors({ ...errors, image: null });
    };
 
    const handleSubmit = (e) => {
@@ -44,6 +46,26 @@ function SurveyView() {
                setErrors(error.response.data.errors);
             }
          })
+   }
+
+   const onChangeTitle = (e) => {
+      setSurvey({ ...survey, title: e.target.value });
+      setErrors({ ...errors, title: null });
+
+   }
+   const onChangeDescription = (e) => {
+      setSurvey({ ...survey, description: e.target.value });
+      setErrors({ ...errors, description: null });
+
+   }
+   const onChangeExpireDate = (e) => {
+      setSurvey({ ...survey, expiry_date: e.target.value });
+      setErrors({ ...errors, expiry_date: null });
+
+   }
+
+   const onSurveyUpdate = (survey) => {
+      setSurvey({ ...survey });
    }
 
    return (
@@ -76,9 +98,7 @@ function SurveyView() {
                   name="title"
                   id="title"
                   value={survey.title}
-                  onChange={(e) =>
-                     setSurvey({ ...survey, title: e.target.value })
-                  }
+                  onChange={onChangeTitle}
                   placeholder="Survey Title"
                   className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                />
@@ -92,7 +112,7 @@ function SurveyView() {
             <div>
                Description
                <textarea className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  value={survey.description} onChange={e => setSurvey({ ...survey, description: e.target.value })}></textarea>
+                  value={survey.description} onChange={onChangeDescription}></textarea>
 
                {errors && (
                   <div className='text-red-500'>
@@ -104,7 +124,7 @@ function SurveyView() {
 
             <div>
                Expiry Date
-               <input className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" type='date' value={survey.expiry_date} onChange={e => setSurvey({ ...survey, expiry_date: e.target.value })} />
+               <input className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" type='date' value={survey.expiry_date} onChange={onChangeExpireDate} />
 
                {errors && (
                   <div className='text-red-500'>
@@ -124,6 +144,8 @@ function SurveyView() {
                   </div>
                )}
             </div>
+
+            {/* <SurveyQuestions survey={survey} onSurveyUpdate={onSurveyUpdate} /> */}
 
             <br />
             <TButton>Submit</TButton>
