@@ -179,6 +179,7 @@ export const ContextProvider = ({ children }) => {
    const [currentUser, setCurrentUser] = useState({});
    const [userToken, setUserToken] = useState(localStorage.getItem('token'));
    const [surveys, setSurveys] = useState(tmpSurveys);
+   const [questionTypes] = useState(['text', 'select', 'radio', 'checkbox', 'textarea']);
 
    const setTokenToLocalStorage = (token) => {
       if (token) {
@@ -193,7 +194,8 @@ export const ContextProvider = ({ children }) => {
          userToken,
          setUserToken,
          setTokenToLocalStorage,
-         surveys
+         surveys,
+         questionTypes
       }}>
          {children}
       </StateContext.Provider>

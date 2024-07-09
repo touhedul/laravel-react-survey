@@ -145,8 +145,10 @@ function SurveyView() {
                )}
             </div>
 
-            {/* <SurveyQuestions survey={survey} onSurveyUpdate={onSurveyUpdate} /> */}
+            <SurveyQuestions survey={survey} onSurveyUpdate={onSurveyUpdate} />
 
+            <br />
+            <br />
             <br />
             <TButton>Submit</TButton>
 
