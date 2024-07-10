@@ -33,7 +33,6 @@ class SurveyController extends Controller
      */
     public function store(Request $request)
     {
-        // return auth()->id();
         $request->validate([
             'title' => 'required|string',
             'description' => 'required|string',
@@ -46,7 +45,8 @@ class SurveyController extends Controller
             $relativePath = $this->saveImage($request->image);
         }
 
-        Survey::create(array_merge($request->all(), ['user_id' => auth()->id(), 'image' => $relativePath]));
+        $survey = Survey::create(array_merge($request->all(), ['user_id' => auth()->id(), 'image' => $relativePath]));
+        $survey->survey_questions()->save($request->questions);
         return $this->jsonResponse();
     }
 

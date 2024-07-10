@@ -1,48 +1,46 @@
 import React, { useEffect, useState } from 'react'
 import QuestionEditor from './QuestionEditor'
 import { v4 as uuidv4 } from 'uuid';
+import TButton from './core/TButton';
+import { PlusIcon } from '@heroicons/react/24/outline';
 
-function SurveyQuestions(survey, onSurveyUpdate) {
-   const [model, setModel] = useState({ ...survey.survey })
+function SurveyQuestions({ questions, onQuestionUpdate }) {
+   // const [model, setModel] = useState({ ...survey })
+   const [myQuestions, setMyQuestions] = useState([...questions]);
    // console.log('model', model);
    // debugger;
-   const addQuestion = (e) => {
-      e.preventDefault();
-      setModel(
-         {
-            ...model,
-            questions: [
-               ...model.questions,
-               {
-                  id: uuidv4(),
-                  type: "text",
-                  question: "",
-                  description: "",
-                  data: {}
-               }
-            ]
-
-         })
+   const addQuestion = (index) => {
+      // // e.preventDefault();
+      index = index != undefined ? index : myQuestions.length;
+      myQuestions.splice(index, 0, {
+         id: uuidv4(),
+         type: "text",
+         question: "",
+         description: "",
+         data: {}
+      })
+      setMyQuestions([...myQuestions]);
+      onQuestionUpdate(myQuestions);
    }
 
 
    const questionChange = (question) => {
-      if (!question) return;
+      // if (!question) return;
 
-      const newQuestions = model.questions.map((modelQuestion) => {
-         if (modelQuestion.id === question.id) {
-            return { ...question }
-         }
-         return modelQuestion;
-      })
+      // const newQuestions = myQuestions.map((modelQuestion) => {
+      //    if (modelQuestion.id === question.id) {
+      //       return { ...question }
+      //    }
+      //    return modelQuestion;
+      // })
 
-      setModel({ ...model, questions: newQuestions });
+      // setModel({ ...model, questions: newQuestions });
    }
 
 
    const deleteQuestion = (question) => {
-      const newQuestions = model.questions.filter((modelQuestion) => modelQuestion.id != question.id);
-      setModel({ ...model, questions: newQuestions });
+      // const newQuestions = myQuestions.filter((modelQuestion) => modelQuestion.id != question.id);
+      // setModel({ ...model, questions: newQuestions });
    }
 
 
@@ -52,11 +50,17 @@ function SurveyQuestions(survey, onSurveyUpdate) {
 
    return (
       <>
-         <h1>Questions</h1>
-         <button onClick={addQuestion}>Add Question</button>
+         <br />
+         <button type="button"
 
-         {model.questions.length ? (
-            model.questions.map((q, ind) => (
+            className="flex items-center text-sm py-2 px-4 rounded-sm text-white bg-gray-800 hover:bg-gray-700"
+            onClick={addQuestion}>
+            <PlusIcon className="w-4 mr-2" />
+            Add Question</button>
+         SurveyQuestions
+         <pre>{JSON.stringify(questions, undefined, 2)}</pre>
+         {myQuestions.length ? (
+            myQuestions.map((q, ind) => (
 
                <QuestionEditor
                   key={q.id}
@@ -68,7 +72,9 @@ function SurveyQuestions(survey, onSurveyUpdate) {
                />
             ))
          ) : (
-            <div>No Question created</div >
+            <div className="text-gray-400 text-center py-4">
+               You don't have any questions created
+            </div>
          )
          }
 

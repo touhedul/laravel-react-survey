@@ -18,4 +18,9 @@ class Survey extends Model
         'expiry_date',
         'status',
     ];
+
+    public function survey_questions()
+    {
+        return $this->hasMany(SurveyQuestion::class);
+    }
 }

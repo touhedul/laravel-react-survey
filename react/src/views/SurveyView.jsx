@@ -68,6 +68,10 @@ function SurveyView() {
       setSurvey({ ...survey });
    }
 
+   const onQuestionUpdate = (questions) => {
+      setSurvey({ ...survey, questions: questions });
+   }
+
    return (
       <PageComponent title={'Survey'}>
          <form onSubmit={handleSubmit} encType='multipart/form-data'>
@@ -145,7 +149,9 @@ function SurveyView() {
                )}
             </div>
 
-            <SurveyQuestions survey={survey} onSurveyUpdate={onSurveyUpdate} />
+            Survey View
+            <pre>{JSON.stringify(survey, undefined, 2)}</pre>
+            <SurveyQuestions questions={survey.questions} onQuestionUpdate={onQuestionUpdate} />
 
             <br />
             <br />
