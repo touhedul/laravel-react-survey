@@ -3,6 +3,7 @@ import { Bars3Icon, BellIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/ou
 import { Navigate, NavLink, Outlet } from 'react-router-dom'
 import { useStateContext } from '../contexts/ContextProvider'
 import axiosClient from '../axios'
+import { useEffect } from 'react'
 
 const navigation = [
    { name: 'Dashboard', to: '/' },
@@ -36,6 +37,16 @@ export default function DefaultLayout() {
             console.log(error)
          })
    }
+
+   useEffect(() => {
+      axiosClient.get('/user')
+         .then((response) => {
+            setCurrentUser(response.data.data);
+         })
+         .catch((error) => {
+            console.log(error);
+         });
+   }, [])
 
    if (!userToken) {
       return <Navigate to="login" />

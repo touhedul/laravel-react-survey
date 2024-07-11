@@ -39,7 +39,7 @@ function SurveyView() {
          .post('/surveys', payload)
          .then(response => {
             console.log('response', response);
-            // navigate("/surveys");
+            navigate("/surveys");
          })
          .catch(error => {
             if (error.response.data.errors) {
@@ -64,12 +64,12 @@ function SurveyView() {
 
    }
 
-   const onSurveyUpdate = (survey) => {
-      setSurvey({ ...survey });
-   }
-
    const onQuestionUpdate = (questions) => {
       setSurvey({ ...survey, questions: questions });
+   }
+
+   const setQuestionsErrors = (e) => {
+      setErrors({ ...errors, questions: null });
    }
 
    return (
@@ -149,9 +149,13 @@ function SurveyView() {
                )}
             </div>
 
-            Survey View
-            <pre>{JSON.stringify(survey, undefined, 2)}</pre>
-            <SurveyQuestions questions={survey.questions} onQuestionUpdate={onQuestionUpdate} />
+            <br />
+            {errors && (
+               <div className='text-red-500'>
+                  {errors.questions}
+               </div>
+            )}
+            <SurveyQuestions questions={survey.questions} onQuestionUpdate={onQuestionUpdate} setQuestionsErrors={setQuestionsErrors} />
 
             <br />
             <br />

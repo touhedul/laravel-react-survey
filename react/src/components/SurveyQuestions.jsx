@@ -4,11 +4,8 @@ import { v4 as uuidv4 } from 'uuid';
 import TButton from './core/TButton';
 import { PlusIcon } from '@heroicons/react/24/outline';
 
-function SurveyQuestions({ questions, onQuestionUpdate }) {
-   // const [model, setModel] = useState({ ...survey })
+function SurveyQuestions({ questions, onQuestionUpdate, setQuestionsErrors }) {
    const [myQuestions, setMyQuestions] = useState([...questions]);
-   // console.log('model', model);
-   // debugger;
    const addQuestion = (index) => {
       // // e.preventDefault();
       index = index != undefined ? index : myQuestions.length;
@@ -21,6 +18,7 @@ function SurveyQuestions({ questions, onQuestionUpdate }) {
       })
       setMyQuestions([...myQuestions]);
       onQuestionUpdate(myQuestions);
+      setQuestionsErrors();
    }
 
 
@@ -60,8 +58,6 @@ function SurveyQuestions({ questions, onQuestionUpdate }) {
             onClick={addQuestion}>
             <PlusIcon className="w-4 mr-2" />
             Add Question</button>
-         SurveyQuestions
-         <pre>{JSON.stringify(questions, undefined, 2)}</pre>
          {myQuestions.length ? (
             myQuestions.map((q, ind) => (
 

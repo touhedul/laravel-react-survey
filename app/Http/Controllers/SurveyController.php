@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
+use App\Http\Resources\SurveyResource;
 use App\Models\SurveyQuestion;
 use Illuminate\Http\Request;
 use Str;
@@ -17,8 +18,9 @@ class SurveyController extends Controller
      */
     public function index()
     {
-        $surveys = Survey::where('user_id', auth()->id())->get();
-        return $this->jsonResponse($surveys);
+        $surveys = Survey::where('user_id', auth()->id())->with('survey_questions')->latest()->paginate(2);
+        return SurveyResource::collection($surveys);
+        // return $this->jsonResponse($surveys);
     }
 
     /**
@@ -41,6 +43,7 @@ class SurveyController extends Controller
             'image' => 'nullable',
             'expiry_date' => 'required|date',
             'status' => 'required',
+            'questions' => 'required|array',
             'questions.*.question' => 'required|string',
 
         ]);
