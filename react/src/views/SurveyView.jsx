@@ -39,7 +39,7 @@ function SurveyView() {
          .post('/surveys', payload)
          .then(response => {
             console.log('response', response);
-            navigate("/surveys");
+            // navigate("/surveys");
          })
          .catch(error => {
             if (error.response.data.errors) {

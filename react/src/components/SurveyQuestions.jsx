@@ -25,28 +25,31 @@ function SurveyQuestions({ questions, onQuestionUpdate }) {
 
 
    const questionChange = (question) => {
-      // if (!question) return;
+      if (!question) return;
 
-      // const newQuestions = myQuestions.map((modelQuestion) => {
-      //    if (modelQuestion.id === question.id) {
-      //       return { ...question }
-      //    }
-      //    return modelQuestion;
-      // })
+      const newQuestions = myQuestions.map((modelQuestion) => {
+         if (modelQuestion.id === question.id) {
+            return { ...question }
+         }
+         return modelQuestion;
+      })
 
-      // setModel({ ...model, questions: newQuestions });
+      setMyQuestions(newQuestions);
+      onQuestionUpdate(newQuestions);
    }
 
 
    const deleteQuestion = (question) => {
-      // const newQuestions = myQuestions.filter((modelQuestion) => modelQuestion.id != question.id);
-      // setModel({ ...model, questions: newQuestions });
+      const newQuestions = myQuestions.filter((modelQuestion) => modelQuestion.id != question.id);
+
+      setMyQuestions(newQuestions);
+      onQuestionUpdate(newQuestions);
    }
 
 
-   // useEffect(() => {
-   //    onSurveyUpdate(model)
-   // }, [model])
+   useEffect(() => {
+      setMyQuestions(questions)
+   }, [questions])
 
    return (
       <>

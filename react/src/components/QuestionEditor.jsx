@@ -19,7 +19,7 @@ function QuestionEditor({
 
    useEffect(() => {
       questionChange(model);
-   }, [])
+   }, [model])
    return (
       <div>
          <br />
@@ -79,6 +79,7 @@ function QuestionEditor({
                   Question
                </label>
                <input
+                  required
                   type="text"
                   name="question"
                   id="question"

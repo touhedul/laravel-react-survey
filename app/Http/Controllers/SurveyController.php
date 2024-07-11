@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
+use App\Models\SurveyQuestion;
 use Illuminate\Http\Request;
 use Str;
 use File;
@@ -33,20 +34,32 @@ class SurveyController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'title' => 'required|string',
             'description' => 'required|string',
-            'image' => 'required',
+            'image' => 'nullable',
             'expiry_date' => 'required|date',
             'status' => 'required',
+            'questions.*.question' => 'required|string',
+
         ]);
 
         if (isset($request->image)) {
             $relativePath = $this->saveImage($request->image);
         }
 
-        $survey = Survey::create(array_merge($request->all(), ['user_id' => auth()->id(), 'image' => $relativePath]));
-        $survey->survey_questions()->save($request->questions);
+        $survey = Survey::create(array_merge($request->all(), ['user_id' => auth()->id(), 'image' => @$relativePath]));
+
+        foreach ($request->questions as $questionData) {
+            SurveyQuestion::create([
+                'survey_id' => $survey->id,
+                'question' => $questionData['question'],
+                'type' => $questionData['type'],
+                'description' => $questionData['description']
+            ]);
+        }
+
         return $this->jsonResponse();
     }
 
