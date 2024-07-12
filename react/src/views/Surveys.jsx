@@ -17,9 +17,13 @@ function Surveys() {
       console.log('on delete click');
    }
 
-   useEffect(() => {
+   const changePaginatedData = (url) => {
+      getSurveys(url)
+   }
+
+   const getSurveys = (url = '/surveys') => {
       setLoading(true);
-      axiosClient.get('/surveys')
+      axiosClient.get(url)
          .then((response) => {
             setSurveys(response.data.data);
             setMeta(response.data.meta);
@@ -29,6 +33,9 @@ function Surveys() {
          .catch(err => {
             console.log(err);
          })
+   }
+   useEffect(() => {
+      getSurveys();
    }, [])
 
    return (
@@ -47,7 +54,7 @@ function Surveys() {
             </div>
          }
          <br />
-         <Pagination meta={meta} />
+         <Pagination meta={meta} changePaginatedData={changePaginatedData} />
       </PageComponent>
    )
 }
