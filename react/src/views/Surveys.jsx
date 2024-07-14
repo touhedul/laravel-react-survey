@@ -12,9 +12,16 @@ function Surveys() {
    const [surveys, setSurveys] = useState([]);
    const [loading, setLoading] = useState(false);
    const [meta, setMeta] = useState({});
+   const { setToastMessage } = useStateContext();
 
-   const onDeleteClick = () => {
-      console.log('on delete click');
+   const onDeleteClick = (id) => {
+      if (confirm('Are you sure to delete this survey?')) {
+         axiosClient.delete(`/surveys/${id}`)
+            .then(response => {
+               setToastMessage("Deleted successfully");
+               getSurveys();
+            })
+      }
    }
 
    const changePaginatedData = (url) => {

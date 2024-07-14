@@ -1,16 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PageComponent from '../components/PageComponent'
 import TButton from '../components/core/TButton';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import axiosClient from '../axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import SurveyQuestions from '../components/SurveyQuestions';
+import { useStateContext } from '../contexts/ContextProvider';
 
 function SurveyView() {
    const navigate = useNavigate();
+   const [loading, setLoading] = useState(false);
+   const { surveyId } = useParams();
    const [survey, setSurvey] = useState({
       title: "",
-      status: false,
+      status: true,
       image: null,
       image_url: "",
       description: "",
@@ -19,6 +22,7 @@ function SurveyView() {
    });
 
    const [errors, setErrors] = useState(null);
+   const { setToastMessage } = useStateContext();
    const onImageChoose = (e) => {
       const file = e.target.files[0];
       const reader = new FileReader();
@@ -32,15 +36,25 @@ function SurveyView() {
 
    const handleSubmit = (e) => {
       e.preventDefault();
-      console.log("Submit", survey);
       const payload = { ...survey };
-      payload.image = payload.image_url;
-      axiosClient
-         .post('/surveys', payload)
-         .then(response => {
-            console.log('response', response);
-            navigate("/surveys");
-         })
+      if (payload.image) {
+         payload.image = payload.image_url;
+      }
+      delete payload.image_url;
+      let request = null;
+      let toastMsg = '';
+      if (surveyId) {
+         toastMsg = 'Survey updated successfully';
+         request = axiosClient.put(`/surveys/${surveyId}`, payload);
+      } else {
+         toastMsg = 'Survey created successfully';
+         request = axiosClient.post('/surveys', payload);
+      }
+
+      request.then(response => {
+         setToastMessage(toastMsg);
+         navigate("/surveys");
+      })
          .catch(error => {
             if (error.response.data.errors) {
                setErrors(error.response.data.errors);
@@ -72,97 +86,115 @@ function SurveyView() {
       setErrors({ ...errors, questions: null });
    }
 
+
+   useEffect(() => {
+      if (surveyId) {
+         setLoading(true);
+         axiosClient
+            .get(`/surveys/${surveyId}`)
+            .then((response) => {
+               setLoading(false);
+               setSurvey(response.data.data);
+            })
+      }
+   }, []);
+
    return (
-      <PageComponent title={'Survey'}>
-         <form onSubmit={handleSubmit} encType='multipart/form-data'>
+      <PageComponent title={surveyId ? 'Edit Survey' : 'Create Survey'}>
+         {loading && <div className='text-center'>Loading...</div>}
 
-            {survey.image_url && (
-               <img className='w-32 h-32 object-cover' src={survey.image_url} />
-            )}
+         {!loading && (
+            <form onSubmit={handleSubmit} encType='multipart/form-data'>
 
-            <input type='file' onChange={onImageChoose} />
+               {survey.image_url && (
+                  <img className='w-32 h-32 object-cover' src={survey.image_url} />
+               )}
 
-            {errors && (
-               <div className='text-red-500'>
-                  {errors.image}
+               <input type='file' onChange={onImageChoose} />
+
+               {errors && (
+                  <div className='text-red-500'>
+                     {errors.image}
+                  </div>
+               )}
+               <br />
+               <br />
+
+               <div className="col-span-6 sm:col-span-3">
+                  <label
+                     htmlFor="title"
+                     className="block text-sm font-medium text-gray-700"
+                  >
+                     Survey Title
+                  </label>
+                  <input
+                     type="text"
+                     name="title"
+                     id="title"
+                     value={survey.title}
+                     onChange={onChangeTitle}
+                     placeholder="Survey Title"
+                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  />
+                  {errors && (
+                     <div className='text-red-500'>
+                        {errors.title}
+                     </div>
+                  )}
                </div>
-            )}
-            <br />
-            <br />
+               <br />
+               <div>
+                  Description
+                  <textarea className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                     value={survey.description} onChange={onChangeDescription}></textarea>
 
-            <div className="col-span-6 sm:col-span-3">
-               <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-700"
-               >
-                  Survey Title
-               </label>
-               <input
-                  type="text"
-                  name="title"
-                  id="title"
-                  value={survey.title}
-                  onChange={onChangeTitle}
-                  placeholder="Survey Title"
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-               />
-               {errors && (
-                  <div className='text-red-500'>
-                     {errors.title}
-                  </div>
-               )}
-            </div>
-            <br />
-            <div>
-               Description
-               <textarea className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  value={survey.description} onChange={onChangeDescription}></textarea>
-
-               {errors && (
-                  <div className='text-red-500'>
-                     {errors.description}
-                  </div>
-               )}
-            </div>
-            <br />
-
-            <div>
-               Expiry Date
-               <input className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" type='date' value={survey.expiry_date} onChange={onChangeExpireDate} />
-
-               {errors && (
-                  <div className='text-red-500'>
-                     {errors.expiry_date}
-                  </div>
-               )}
-            </div>
-            <br />
-
-            <div>
-               Active
-               <input className="ml-3" type='checkbox' value={survey.status} onChange={e => setSurvey({ ...survey, status: e.target.checked })} />
-
-               {errors && (
-                  <div className='text-red-500'>
-                     {errors.status}
-                  </div>
-               )}
-            </div>
-
-            <br />
-            {errors && (
-               <div className='text-red-500'>
-                  {errors.questions}
+                  {errors && (
+                     <div className='text-red-500'>
+                        {errors.description}
+                     </div>
+                  )}
                </div>
-            )}
-            <SurveyQuestions questions={survey.questions} onQuestionUpdate={onQuestionUpdate} setQuestionsErrors={setQuestionsErrors} />
+               <br />
 
-            <br />
-            <br />
-            <br />
-            <TButton>Submit</TButton>
+               <div>
+                  Expiry Date
+                  <input className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" type='date' value={survey.expiry_date} onChange={onChangeExpireDate} />
 
-         </form>
+                  {errors && (
+                     <div className='text-red-500'>
+                        {errors.expiry_date}
+                     </div>
+                  )}
+               </div>
+               <br />
+
+               <div>
+                  Active
+                  <input className="ml-3" type='checkbox' checked={survey.status} onChange={e => setSurvey({ ...survey, status: e.target.checked })} />
+
+                  {errors && (
+                     <div className='text-red-500'>
+                        {errors.status}
+                     </div>
+                  )}
+               </div>
+
+               <br />
+               {errors && (
+                  <div className='text-red-500'>
+                     {errors.questions}
+                  </div>
+               )}
+               <SurveyQuestions questions={survey.questions} onQuestionUpdate={onQuestionUpdate} setQuestionsErrors={setQuestionsErrors} />
+
+               <br />
+               <br />
+               <br />
+               <TButton>{surveyId ? 'Update' : 'Create'}</TButton>
+
+            </form>
+
+         )}
       </PageComponent>
    )
 }

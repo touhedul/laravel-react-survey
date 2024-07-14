@@ -71,7 +71,8 @@ class SurveyController extends Controller
      */
     public function show(Survey $survey)
     {
-        return $this->jsonResponse($survey);
+        $survey->load('survey_questions');
+        return new SurveyResource($survey);
     }
 
     /**
@@ -87,7 +88,35 @@ class SurveyController extends Controller
      */
     public function update(Request $request, Survey $survey)
     {
-        $survey->update($request->all());
+        $request->validate([
+            'title' => 'required|string',
+            'description' => 'required|string',
+            'image' => 'nullable',
+            'expiry_date' => 'required|date',
+            'status' => 'required',
+            'questions' => 'required|array',
+            'questions.*.question' => 'required|string',
+
+        ]);
+
+        if (isset($request->image)) {
+            $relativePath = $this->saveImage($request->image);
+        } else {
+            $relativePath = $survey->image;
+        }
+
+        $survey->update(array_merge($request->all(), ['user_id' => auth()->id(), 'image' => @$relativePath]));
+
+        SurveyQuestion::where('survey_id', $survey->id)->delete();
+
+        foreach ($request->questions as $questionData) {
+            SurveyQuestion::create([
+                'survey_id' => $survey->id,
+                'question' => $questionData['question'],
+                'type' => $questionData['type'],
+                'description' => $questionData['description']
+            ]);
+        }
         return $this->jsonResponse();
     }
 
@@ -96,6 +125,7 @@ class SurveyController extends Controller
      */
     public function destroy(Survey $survey)
     {
+        $survey->survey_questions()->delete();
         $survey->delete();
         return $this->jsonResponse();
     }

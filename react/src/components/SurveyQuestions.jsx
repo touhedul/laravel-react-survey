@@ -7,7 +7,6 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 function SurveyQuestions({ questions, onQuestionUpdate, setQuestionsErrors }) {
    const [myQuestions, setMyQuestions] = useState([...questions]);
    const addQuestion = (index) => {
-      // // e.preventDefault();
       index = index != undefined ? index : myQuestions.length;
       myQuestions.splice(index, 0, {
          id: uuidv4(),

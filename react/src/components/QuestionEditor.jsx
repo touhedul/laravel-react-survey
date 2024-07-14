@@ -100,14 +100,15 @@ function QuestionEditor({
                   Question Type
                </label>
                <select
-                  onChange={(e) => setModel({ ...model, questionType: e.target.value })}
+                  value={model.type}
+                  onChange={(e) => setModel({ ...model, type: e.target.value })}
                   className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
 
                >
 
                   {questionTypes.map((type) => (
                      <option value={type} key={type}
-                     >{ucFirst(type)}</option>
+                     >{ucFirst(type)} </option>
                   ))}
                </select>
             </div>
