@@ -9,10 +9,16 @@ class SurveyQuestion extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['question', 'type', 'survey_id', 'description'];
+    protected $fillable = ['question', 'type', 'survey_id', 'description', 'data'];
+
+
 
     public function survey()
     {
         return $this->belongsTo(Survey::class);
     }
+
+    protected $casts = [
+        'data' => 'array'
+    ];
 }

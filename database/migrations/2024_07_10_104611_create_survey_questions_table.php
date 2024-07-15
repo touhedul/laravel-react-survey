@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('question');
             $table->text('description')->nullable();
             $table->string('type');
+            $table->json('data')->nullable();
             $table->timestamps();
         });
     }
