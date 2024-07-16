@@ -54,6 +54,8 @@ class SurveyController extends Controller
 
         $survey = Survey::create(array_merge($request->all(), ['user_id' => auth()->id(), 'image' => @$relativePath]));
 
+        $survey->update(['slug' => Str::slug($survey->title) . "-" . $survey->id]);
+
         foreach ($request->questions as $questionData) {
             SurveyQuestion::create([
                 'survey_id' => $survey->id,
@@ -165,5 +167,12 @@ class SurveyController extends Controller
         file_put_contents($relativePath, $image);
 
         return $relativePath;
+    }
+
+
+    public function getBySlug(Survey $survey)
+    {
+        $survey->load('survey_questions');
+        return new SurveyResource($survey);
     }
 }
