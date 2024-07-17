@@ -117,7 +117,8 @@ class SurveyController extends Controller
                 'survey_id' => $survey->id,
                 'question' => $questionData['question'],
                 'type' => $questionData['type'],
-                'description' => $questionData['description']
+                'description' => $questionData['description'],
+                'data' => $questionData['data']
             ]);
         }
         return $this->jsonResponse();
