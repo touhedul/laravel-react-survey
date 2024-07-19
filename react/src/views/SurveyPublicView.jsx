@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import axiosClient from '../axios';
 import PublicSurveyQuestion from '../components/PublicSurveyQuestion';
 import TButton from '../components/core/TButton';
@@ -12,11 +12,25 @@ function SurveyPublicView() {
    });
 
    const [loading, setLoading] = useState(false);
+   const [thankyou, setThankyou] = useState(false);
    const { slug } = useParams();
 
    const handleSubmit = (e) => {
       e.preventDefault();
-      console.log("answer", answers);
+
+      let requestData = {
+         'survey_id': survey.id,
+         'answers': answers
+      };
+
+      axiosClient.post('/surveys/save-answer', requestData)
+         .then((response) => {
+            setThankyou(true);
+         })
+         .catch((error) => {
+            console.log('error', error);
+         })
+
    }
 
    const answerChanged = (questionId, value) => {
@@ -45,7 +59,7 @@ function SurveyPublicView() {
             </div>
          }
          {
-            !loading &&
+            !loading && !thankyou &&
             <div>
                <div><img src={survey.image_url} /></div>
                <p>{survey.title}</p>
@@ -57,6 +71,11 @@ function SurveyPublicView() {
                   ))}
                   <TButton>Submit</TButton>
                </form>
+            </div>
+         }
+         {thankyou &&
+            <div>
+               Thank you for your response. Go to <Link to={`/`}>Home page</Link>
             </div>
          }
       </div>

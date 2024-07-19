@@ -18,6 +18,10 @@ class SurveyQuestion extends Model
         return $this->belongsTo(Survey::class);
     }
 
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
     protected $casts = [
         'data' => 'array'
     ];

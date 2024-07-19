@@ -17,10 +17,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('surveys/get-by-slug/{survey:slug}', [SurveyController::class, 'getBySlug']);
+Route::post('surveys/save-answer', [SurveyController::class, 'saveAnswer']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/user', [AuthController::class, 'user']);
+    Route::get('/dashboard', [AuthController::class, 'dashboard']);
+    Route::get('/surveys/details/{survey}', [SurveyController::class, 'details']);
     Route::resources([
         'surveys' => \App\Http\Controllers\SurveyController::class
     ]);

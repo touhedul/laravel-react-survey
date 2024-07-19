@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SurveyQuestionAnswerResource;
+use App\Http\Resources\SurveyResource;
+use App\Models\Survey;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,7 +62,14 @@ class AuthController extends Controller
 
     public function user()
     {
-
         return $this->jsonResponse(auth()->user());
+    }
+
+
+    public function dashboard()
+    {
+        $surveys = Survey::where('user_id', auth()->id())->with('survey_questions.answers')->get();
+        $total_survey_count = $surveys->count();
+        return $this->jsonResponse(['surveys' => SurveyResource::collection($surveys), 'total_survey_count' => $total_survey_count]);
     }
 }

@@ -6,6 +6,7 @@ use App\Models\Survey;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
 use App\Http\Resources\SurveyResource;
+use App\Models\Answer;
 use App\Models\SurveyQuestion;
 use Illuminate\Http\Request;
 use Str;
@@ -73,6 +74,12 @@ class SurveyController extends Controller
      * Display the specified resource.
      */
     public function show(Survey $survey)
+    {
+        $survey->load('survey_questions');
+        return new SurveyResource($survey);
+    }
+
+    public function details(Survey $survey)
     {
         $survey->load('survey_questions');
         return new SurveyResource($survey);
@@ -175,5 +182,20 @@ class SurveyController extends Controller
     {
         $survey->load('survey_questions');
         return new SurveyResource($survey);
+    }
+
+
+    public function saveAnswer(Request $request)
+    {
+
+        foreach ($request->answers as $questionId => $answer) {
+            Answer::create([
+                'survey_id' => $request->survey_id,
+                'survey_question_id' => $questionId,
+                'answer' => $answer,
+            ]);
+        }
+
+        return $this->jsonResponse();
     }
 }
