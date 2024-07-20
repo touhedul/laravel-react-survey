@@ -82,6 +82,7 @@ class SurveyController extends Controller
     public function details(Survey $survey)
     {
         $survey->load('survey_questions');
+        $survey->load('survey_questions.answers');
         return new SurveyResource($survey);
     }
 

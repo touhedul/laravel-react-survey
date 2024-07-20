@@ -120,28 +120,17 @@ function SurveyDetails() {
                   >
                      Survey Title
                   </label>
-                  <input
-                     disabled
-                     type="text"
-                     name="title"
-                     id="title"
-                     value={survey.title}
-                     onChange={onChangeTitle}
-                     placeholder="Survey Title"
-                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  />
+                  <p>{survey.title}</p>
                </div>
                <br />
                <div>
                   Description
-                  <textarea className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                     value={survey.description} disabled onChange={onChangeDescription}></textarea>
+                  <p>{survey.description}</p>
                </div>
                <br />
 
                <div>
-                  Expiry Date
-                  <input className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" type='date' disabled value={survey.expiry_date} onChange={onChangeExpireDate} />
+                  Expiry Date : {survey.expiry_date}
                </div>
                <br />
 

@@ -76,104 +76,17 @@ function SurveyAnswerDetails({
    return (
       <div>
          <br />
-         <div className="flex justify-between mb-3">
+         <div className="">
             <h4>
-               {index + 1}. {model.question}
+               {index + 1}. {model.question} ({model.description})
             </h4>
-         </div>
-
-         <div className="flex gap-3 justify-between mb-3">
-
-            {/* Question Text */}
-            <div className="flex-1">
-               <label
-                  htmlFor="question"
-                  className="block text-sm font-medium text-gray-700"
-               >
-                  Question
-               </label>
-               <input
-                  required
-                  type="text"
-                  name="question"
-                  disabled
-                  id="question"
-                  value={model.question}
-                  onChange={(ev) =>
-                     setModel({ ...model, question: ev.target.value })
-                  }
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-               />
-            </div>
-            {/* Question Text */}
-
-            <div>
-               <label
-                  htmlFor="questionType"
-                  className="block text-sm font-medium text-gray-700 w-40"
-               >
-                  Question Type
-               </label>
-               <select
-                  disabled
-                  value={model.type}
-                  onChange={onQuestionTypeChange}
-                  className="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-
-               >
-
-                  {questionTypes.map((type) => (
-                     <option value={type} key={type}
-                     >{ucFirst(type)} </option>
-                  ))}
-               </select>
-            </div>
-         </div>
-         <div>
-            <div className="mb-3">
-               <label
-                  htmlFor="questionDescription"
-                  className="block text-sm font-medium text-gray-700"
-               >
-                  Description
-               </label>
-               <textarea
-                  disabled
-                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                  value={model.description}
-                  onChange={(e) => setModel({ ...model, description: e.target.value })}
-               >
-
-               </textarea>
-            </div>
-         </div>
-         {
-            model.data.options && model.data.options.length > 0 && (
+            <h3>Answers:</h3>
+            {model.answers.map((answer, index) => (
                <div>
-                  {model.data.options.map((option, index) => (
-                     <div key={option.uuid} className="flex items-center mb-1">
-                        <span className="w-6 text-sm">{index + 1}.</span>
-                        <input
-                           disabled
-                           type="text"
-                           value={option.text}
-                           onInput={(ev) => {
-                              option.text = ev.target.value;
-                              setModel({ ...model });
-                           }}
-                           className="w-full
-                      rounded-sm
-                      py-1
-                      px-2
-                      text-xs
-                      border border-gray-300
-                      focus:border-indigo-500"
-                        />
-                     </div>
-                  ))}
+                  {index + 1}. {answer.answer}
                </div>
-            )
-         }
+            ))}
+         </div>
       </div>
    )
 }
