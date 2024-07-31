@@ -68,6 +68,7 @@ class AuthController extends Controller
 
     public function dashboard()
     {
+
         $surveys = Survey::where('user_id', auth()->id())->with('survey_questions.answers')->get();
         $total_survey_count = $surveys->count();
         return $this->jsonResponse(['surveys' => SurveyResource::collection($surveys), 'total_survey_count' => $total_survey_count]);

@@ -61,11 +61,22 @@ function SurveyPublicView() {
          {
             !loading && !thankyou &&
             <div>
-               <div><img src={survey.image_url} /></div>
+               {/* <div><img src={survey.image_url} /></div>
                <p>{survey.title}</p>
-               <p>{survey.description}</p>
-               <form onSubmit={handleSubmit}>
-                  <h3>Question</h3>
+               <p>{survey.description}</p> */}
+               <form onSubmit={handleSubmit} className="container mx-auto p-4">
+
+                  <div className="grid grid-cols-6">
+                     <div className="mr-4">
+                        <img src={survey.image_url} alt="" />
+                     </div>
+                     <div className="col-span-5">
+                        <h1 className="text-3xl mb-3">{survey.title}</h1>
+                        <p className="text-gray-500 text-sm mb-3">{survey.description}</p>
+                     </div>
+                  </div>
+                  {/* <h3>Question</h3> */}
+                  <br />
                   {survey.questions.map((question, index) => (
                      <PublicSurveyQuestion question={question} index={index} key={question.id} answerChanged={answerChanged} />
                   ))}
