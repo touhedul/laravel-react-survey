@@ -2,10 +2,10 @@
 
 This project showcases a full-stack survey application built with Laravel for the backend and React for the frontend. It demonstrates various development skills and functionalities.
 
-Purpose
+## Purpose
 This project serves as a personal showcase to display your proficiency in Laravel, React, database integration, and user interface development.
 
-Technology Stack
+## Technology Stack
 Backend:
 PHP: 8.1
 Laravel: 10.10
@@ -15,7 +15,8 @@ Node.js: 20.11
 React: 18.3.1
 Build Tool: Vite
 CSS Framework: Tailwind CSS
-Project Structure
+
+## Project Structure
 The project follows a clear separation of concerns:
 
 laravel/
@@ -24,7 +25,7 @@ react/
   ... (React application files)
 All React code resides within the react folder, while Laravel handles the backend logic and database interaction.
 
-Features
+## Features
 User Management:
 
 Login and Registration functionalities.
@@ -43,9 +44,8 @@ Users can access surveys using the public URL and submit their responses.
 Survey Answer Analysis:
 
 View and analyze submitted survey responses within the application.
-Please note: Image placeholders are included to represent the features. You can replace them with actual screenshots or visuals if desired.
 
-Installation
+## Installation
 Prerequisites:
 
 PHP 8.1 or later with Composer installed
@@ -64,7 +64,7 @@ Bash
 cd laravel-react-survey
 Use code with caution.
 
-Install Laravel dependencies:
+## Install Laravel dependencies:
 
 Bash
 composer install
@@ -84,7 +84,7 @@ Bash
 php artisan migrate
 Use code with caution.
 
-Start the Laravel development server:
+## Start the Laravel development server:
 
 Bash
 php artisan serve
@@ -94,7 +94,7 @@ This will run the Laravel application at http://localhost:8000 by default.
 
 React Project Setup:
 
-Navigate to the react folder within the project directory:
+## Navigate to the react folder within the project directory:
 
 Bash
 cd react
@@ -126,7 +126,7 @@ Use code with caution.
 
 This will run the React development server, typically at http://localhost:3000 by default.
 
-Usage
+## Usage
 Access the Laravel application in your browser (usually http://localhost:8000).
 Login or register as a user.
 Manage your surveys through the provided user interface.
@@ -135,6 +135,6 @@ View and analyze survey responses within the application interface.
 Contributing
 If you'd like to contribute to this project, feel free to fork the repository and submit a pull request. Please follow coding style guidelines and provide clear comments for your changes.   
 
-Contact
+## Contact
 For any questions or feedback, you can reach out via email: touhedulislam46@gmail.com or connect on LinkedIn: https://www.linkedin.com/in/touhedul
 
